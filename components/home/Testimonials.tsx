@@ -1,5 +1,20 @@
 import { Testimonials as TS } from "@/lib/generated/prisma/client";
 import { Star } from "lucide-react";
+import { Skeleton } from "../ui/skeleton";
+
+export const TestimonialSkeleton=()=>{
+    return(
+        <>
+        {Array.from({length:3}).map((_,idx)=>(
+            <Skeleton className="w-96 p-8 rounded-3xl flex flex-col gap-y-2 bg-white dark:bg-neutral-900 border" key={idx}>
+                <Skeleton className="h-4 w-30 bg-gray-200"/>
+                <Skeleton className="h-8 w-full bg-gray-200"/>
+                <Skeleton className="h-4 w-20 bg-gray-200"/>
+            </Skeleton>
+        ))}
+        </>
+    )
+}
 
 export default async function Testimonials({reviews}:{reviews:TS[]}) {
     return (

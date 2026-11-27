@@ -1,19 +1,12 @@
 import { Navbar, NavbarButton, NavbarLogo, NavBody, NavItems } from "@/components/ui/resizable-navbar";
 import { ModeToggle } from './ui/toggle-theme';
-// import { logOut } from '@/actions/authActions';
+import { logOut } from '@/actions/authActions';
 import { Spinner } from './ui/spinner';
 import { navItems } from '@/lib/constants';
-// import { auth } from '@/auth';
 import MobileNavbar from "./MobileNavbar";
 
 
-const NavigartionBar = async() => {
-    // const session=await auth()
-    const session={
-        user:{
-            isSuperUser:null
-        }
-    }
+const NavigartionBar = ({session}:{session?:any}) => {    
     return(
         <Navbar className='fixed top-0'>
             <NavBody>
@@ -21,7 +14,7 @@ const NavigartionBar = async() => {
                 <NavItems items={navItems}/>
                 <div className="flex items-center gap-4">
                     {session?.user ? <>
-                    <NavbarButton>LogOut</NavbarButton>
+                    <NavbarButton onClick={logOut}>LogOut</NavbarButton>
                     <NavbarButton href='/dashboard' variant="secondary">Dashboard</NavbarButton>
                     </>:!session?.user?(
                     <>
@@ -34,7 +27,7 @@ const NavigartionBar = async() => {
                     )
                     }
                     {
-                        session?.user!.isSuperUser && <NavbarButton variant="secondary" href='/admin/users' >Admin</NavbarButton>
+                        session?.user?.isSuperUser! && <NavbarButton variant="secondary" href='/admin/users' >Admin</NavbarButton>
                     }
                     <ModeToggle/>
                 </div>

@@ -1,0 +1,75 @@
+import NextAuth, { CredentialsSignin,type DefaultSession } from "next-auth"
+import Credentials from 'next-auth/providers/credentials'
+import { verifyPassword } from "./lib/passkey"
+import { checkIsUser } from "./services/auth.service"
+
+ 
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [Credentials({
+    credentials:{
+      email:{
+        required:true,
+        type:"email",
+        label:"Email"
+      },
+      password:{
+        required:true,
+        type:"password",
+        label:"Password"
+      },
+    },
+    authorize:async(credentials)=>{
+        const email=credentials.email as string|undefined
+        const password=credentials.password as string|undefined
+        if (!email || !password) {
+            throw new CredentialsSignin("Provide both email and password")
+        }
+        const user=await checkIsUser(email)
+        if (!user) {
+            throw new  Error("Unable to sign in with provided credentials");
+        }
+        if (!user.password) {
+            throw new  Error('Please enter your password and continue')
+        }
+        if (!user.isActive) {
+            throw new Error("Your account is not verified yet.Please verify your gmail to continue.")
+        }
+        const isMatched=await verifyPassword(password,user.password)
+        if (!isMatched) {
+            throw new Error("Unable to sign in with provided credentials");
+        }
+        const userData={
+            id:user.id,
+            username:user.username,
+            email:user.email,
+            isSuperUser:user.isSuperUser,
+            isAdmin:user.isAdmin,
+        }
+        return userData
+    },
+  })],
+  pages:{
+    signIn:'/login',
+  },
+  callbacks:{
+    async session(sessions) {
+        const {token,session}=sessions
+        if (token) {
+            session.user.id=token.sub as string
+            session.user.name=token.name
+            session.user.isSuperUser=token.isSuperUser
+            session.user.isAdmin=token.isAdmin
+        }
+        return session
+    },
+    jwt(jwt) {
+        const {user,token}=jwt
+        if (user) {
+            token.name=user.username
+            token.isSuperUser=user.isSuperUser
+            token.isAdmin=user.isAdmin
+        }
+        return token
+    },
+  }
+})

@@ -7,6 +7,7 @@ const features = [
     title: "Full-Stack Expertise",
     description:
       "We build complete end-to-end solutions including frontend, backend, mobile, APIs, databases, and deployment.",
+    
   },
   {
     icon: Clock,
@@ -19,12 +20,14 @@ const features = [
     title: "Reliable & Secure",
     description:
       "Your project is handled with top-level security and clean architecture for long-term reliability.",
+
   },
   {
     icon: Users,
     title: "1-to-1 Mentorship",
     description:
       "Personal mentorship and guidance for learning, completing tasks, or improving your project.",
+    
   },
   {
     icon: Sparkles,
@@ -43,13 +46,12 @@ const features = [
 export default function ChooseUsSection() {
   return (
     <section>
-        
         {/* Section Header */}
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-            Why Choose <span className="text-indigo-600">Us?</span>
+          <h2 className="text-3xl md:text-4xl font-semibold">
+            Why Choose <span className="text-primary">Us?</span>
           </h2>
-          <p className="mt-3 text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
             We deliver trusted, high-quality solutions with expertise, speed, 
             and a strong focus on modern development.
           </p>
@@ -60,9 +62,10 @@ export default function ChooseUsSection() {
           {features.map((item, idx) => (
             <Card
               key={idx}
+              className="hover:scale-105 duration-200"
             >
                 <CardHeader>
-                    <item.icon className="w-10 h-10 text-indigo-600 mb-4" />
+                    <item.icon className="w-10 h-10 text-primary mb-4" />
                     <CardTitle>{item.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
